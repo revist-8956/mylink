@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "안준성 | 프로필",
-  description: "안녕하세요! 바이브 코딩을 배우고 있는 학생입니다.",
+  description: "안녕하세요! 바이브 코딩을 배우고 있는 한양대학교 학생입니다.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

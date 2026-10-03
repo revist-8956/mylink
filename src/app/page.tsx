@@ -55,7 +55,7 @@ export default function Home() {
 
         {/* Bio */}
         <p className="text-base leading-relaxed text-zinc-600 dark:text-zinc-300 mb-8 max-w-xs font-normal">
-          안녕하세요! 바이브 코딩을 배우고 있는 학생입니다.
+          안녕하세요! 바이브 코딩을 배우고 있는 한양대학교 학생입니다.
         </p>
 
         {/* Skill / Interest Tags */}
