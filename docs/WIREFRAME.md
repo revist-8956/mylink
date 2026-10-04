@@ -1,7 +1,7 @@
 # [와이어프레임] mylink 메인 방문자 화면 명세 (Wireframe Specification)
 
 > **문서 버전:** v1.0.0  
-> **관련 문서:** [`docs/PRD.md`](./PRD.md), [`DESIGN.md`](../DESIGN.md)  
+> **관련 문서:** [`docs/PRD.md`](./PRD.md), [`DESIGN.md`](./DESIGN.md)  
 > **적용 테마:** Discord 메인 테마 (DESIGN.md 규격 100% 엄격 준수)
 
 ---
