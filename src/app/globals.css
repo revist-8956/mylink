@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fffdf0;
+  --background: #ffffff;
   --foreground: #000000;
+  --discord-primary: #5865f2;
+  --discord-green: #35ed7e;
+  --discord-magenta: #ec48bd;
+  --discord-cyan: #00b0f4;
+  --discord-surface-indigo: #1e2353;
+  --discord-surface-onyx: #23272a;
 }
 
 @theme inline {
@@ -27,11 +33,14 @@ body {
   overflow-x: hidden;
 }
 
-/* Neobrutalism Dot Grid Background */
-.bg-dot-grid {
-  background-color: #fffdf0;
-  background-image: radial-gradient(rgba(0, 0, 0, 0.15) 1.5px, transparent 1.5px);
-  background-size: 20px 20px;
+/* Discord Atmospheric Light Gradient Canvas */
+.discord-canvas {
+  background-color: #ffffff;
+  background-image: 
+    radial-gradient(at 15% 15%, rgba(88, 101, 242, 0.08) 0px, transparent 55%),
+    radial-gradient(at 85% 20%, rgba(236, 72, 189, 0.06) 0px, transparent 50%),
+    radial-gradient(at 50% 85%, rgba(88, 101, 242, 0.06) 0px, transparent 60%);
+  background-attachment: fixed;
 }
 
 /* Marquee Ticker Animation */
@@ -54,8 +63,8 @@ body {
   animation-play-state: paused;
 }
 
-/* Brutal selection */
+/* Discord Blurple selection */
 ::selection {
-  background-color: #ffe600;
-  color: #000000;
+  background-color: #5865f2;
+  color: #ffffff;
 }
