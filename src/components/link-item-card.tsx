@@ -3,6 +3,7 @@
 import React from "react";
 import { LinkItem } from "@/types";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import {
   BookOpen,
   Sparkles,
@@ -13,13 +14,23 @@ import {
   MessageSquare,
   ChevronRight,
   Link2,
+  Trash2,
+  ExternalLink,
 } from "lucide-react";
 
 interface LinkItemCardProps {
   link: LinkItem;
+  isManageMode?: boolean;
+  onToggleActive?: (id: string) => void;
+  onDelete?: (id: string) => void;
 }
 
-export function LinkItemCard({ link }: LinkItemCardProps) {
+export function LinkItemCard({
+  link,
+  isManageMode = false,
+  onToggleActive,
+  onDelete,
+}: LinkItemCardProps) {
   // 아이콘 및 컬러 테마 매핑
   const renderIcon = () => {
     switch (link.icon) {
@@ -93,19 +104,18 @@ export function LinkItemCard({ link }: LinkItemCardProps) {
     return "discord"; // HOT, NEW, LOG, etc.
   };
 
-  return (
-    <a
-      href={link.url}
-      target={link.url.startsWith("http") ? "_blank" : undefined}
-      rel={link.url.startsWith("http") ? "noopener noreferrer" : undefined}
-      className="group block w-full bg-[#1e2353] hover:bg-[#252b66] border border-[#23272a] hover:border-[#5865f2] rounded-2xl p-3.5 xs:p-4 shadow-[0_4px_20px_rgba(0,0,0,0.25)] hover:shadow-[0_8px_32px_rgba(88,101,242,0.28)] hover:-translate-y-0.5 active:scale-[0.99] transition-all duration-200 cursor-pointer"
+  const cardContent = (
+    <div
+      className={`group relative w-full bg-[#1e2353] border border-[#23272a] hover:border-[#5865f2] rounded-2xl p-3.5 xs:p-4 shadow-[0_4px_20px_rgba(0,0,0,0.25)] hover:shadow-[0_8px_32px_rgba(88,101,242,0.28)] transition-all duration-200 ${
+        !link.isActive ? "opacity-60 bg-[#161a3f]" : ""
+      }`}
     >
       <div className="flex items-center justify-between gap-3">
         {/* Left Icon & Text details */}
-        <div className="flex items-center gap-3 xs:gap-3.5 min-w-0">
+        <div className="flex items-center gap-3 xs:gap-3.5 min-w-0 flex-1">
           {renderIcon()}
 
-          <div className="text-left min-w-0">
+          <div className="text-left min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="font-bold text-sm xs:text-base text-white group-hover:text-[#5865f2] transition-colors truncate">
                 {link.title}
@@ -115,6 +125,11 @@ export function LinkItemCard({ link }: LinkItemCardProps) {
                   {link.badge}
                 </Badge>
               )}
+              {!link.isActive && isManageMode && (
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-neutral-800 text-neutral-400 border border-neutral-700">
+                  숨김 상태
+                </span>
+              )}
             </div>
 
             {link.description && (
@@ -122,14 +137,74 @@ export function LinkItemCard({ link }: LinkItemCardProps) {
                 {link.description}
               </p>
             )}
+
+            {isManageMode && (
+              <p className="text-[11px] font-mono text-neutral-500 mt-1 truncate">
+                {link.url}
+              </p>
+            )}
           </div>
         </div>
 
-        {/* Right Arrow Action */}
-        <div className="w-8 h-8 rounded-full bg-[#0a0d3a] border border-[#23272a] flex items-center justify-center shrink-0 text-neutral-400 group-hover:bg-[#5865f2] group-hover:text-white group-hover:border-transparent group-hover:translate-x-1 transition-all">
-          <ChevronRight className="w-4 h-4" />
-        </div>
+        {/* Right Action */}
+        {isManageMode ? (
+          <div className="flex items-center gap-2 shrink-0">
+            {/* 외부 링크 미리 열어보기 */}
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 rounded-full bg-[#0a0d3a] border border-[#23272a] hover:border-[#5865f2] flex items-center justify-center text-neutral-400 hover:text-white transition-all cursor-pointer"
+              title="새 창에서 열기"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+
+            {/* 노출 스위치 토글 */}
+            <div className="flex items-center gap-1.5 bg-[#0a0d3a] border border-[#23272a] px-2 py-1 rounded-xl">
+              <span className="text-[10px] font-mono text-neutral-400 select-none">
+                {link.isActive ? "노출" : "숨김"}
+              </span>
+              <Switch
+                checked={link.isActive}
+                onCheckedChange={() => onToggleActive?.(link.id)}
+                aria-label="링크 노출 토글"
+              />
+            </div>
+
+            {/* 삭제 버튼 */}
+            {onDelete && (
+              <button
+                type="button"
+                onClick={() => onDelete(link.id)}
+                className="w-8 h-8 rounded-full bg-red-950/40 border border-red-900/50 hover:bg-red-900 hover:border-red-500 flex items-center justify-center text-red-300 hover:text-white transition-all cursor-pointer"
+                title="링크 삭제"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="w-8 h-8 rounded-full bg-[#0a0d3a] border border-[#23272a] flex items-center justify-center shrink-0 text-neutral-400 group-hover:bg-[#5865f2] group-hover:text-white group-hover:border-transparent group-hover:translate-x-1 transition-all">
+            <ChevronRight className="w-4 h-4" />
+          </div>
+        )}
       </div>
+    </div>
+  );
+
+  if (isManageMode) {
+    return cardContent;
+  }
+
+  return (
+    <a
+      href={link.url}
+      target={link.url.startsWith("http") ? "_blank" : undefined}
+      rel={link.url.startsWith("http") ? "noopener noreferrer" : undefined}
+      className="block hover:-translate-y-0.5 active:scale-[0.99] transition-all duration-200 cursor-pointer"
+    >
+      {cardContent}
     </a>
   );
 }

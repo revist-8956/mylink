@@ -3,10 +3,19 @@
 import React, { useState } from "react";
 import { LinkItem, Profile } from "@/types";
 import { initialMockProfile, initialMockLinks } from "@/lib/mock-data";
+import { useStoredLinks } from "@/lib/storage";
 import { LinkItemCard } from "@/components/link-item-card";
+import { AddLinkDialog } from "@/components/add-link-dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, Copy, Share2 } from "lucide-react";
+import {
+  Check,
+  Share2,
+  Plus,
+  SlidersHorizontal,
+  RotateCcw,
+  Layers,
+} from "lucide-react";
 
 interface LinkListViewProps {
   profile?: Profile;
@@ -19,13 +28,80 @@ export function LinkListView({
   links = initialMockLinks,
   username = "junseong",
 }: LinkListViewProps) {
+  // 1. 로컬 상태로 링크 목록 관리 (React 19 권장 useSyncExternalStore 기반 storage hook)
+  const [currentLinks, setCurrentLinks] = useStoredLinks(profile.userId, links);
+  const [isManageMode, setIsManageMode] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // 활성화된 링크만 순서대로 정렬하여 노출 (PRD F-PUB-01 명세)
-  const activeLinks = [...links]
+  const triggerToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 3000);
+  };
+
+  // 링크 추가 핸들러 (F-LINK-01, 로컬 상태 저장)
+  const handleAddLink = (
+    newLinkData: Omit<LinkItem, "id" | "userId" | "createdAt" | "order">
+  ) => {
+    const newLink: LinkItem = {
+      ...newLinkData,
+      id: `link-${Date.now()}`,
+      userId: profile.userId,
+      order: 0,
+      createdAt: new Date().toISOString(),
+    };
+
+    // 새로 추가된 링크를 최상단에 배치하고 기존 링크들의 order를 1씩 증가
+    const updated = [
+      newLink,
+      ...currentLinks.map((item) => ({ ...item, order: item.order + 1 })),
+    ];
+
+    setCurrentLinks(updated);
+    triggerToast("새 링크가 성공적으로 추가되었습니다! 🎉");
+  };
+
+  // 링크 노출/숨김 토글 핸들러 (F-LINK-04)
+  const handleToggleActive = (id: string) => {
+    const updated = currentLinks.map((link) =>
+      link.id === id ? { ...link, isActive: !link.isActive } : link
+    );
+    setCurrentLinks(updated);
+    const target = updated.find((l) => l.id === id);
+    triggerToast(
+      target?.isActive
+        ? `"${target.title}" 링크가 노출됩니다.`
+        : `"${target?.title}" 링크가 숨김 처리되었습니다.`
+    );
+  };
+
+  // 링크 삭제 핸들러 (F-LINK-06)
+  const handleDeleteLink = (id: string) => {
+    const target = currentLinks.find((l) => l.id === id);
+    const updated = currentLinks.filter((link) => link.id !== id);
+    setCurrentLinks(updated);
+    triggerToast(`"${target?.title || "링크"}" 삭제가 완료되었습니다.`);
+  };
+
+  // 초기 데모 데이터로 복원
+  const handleResetLinks = () => {
+    if (window.confirm("초기 기본 데모 링크 목록으로 되돌리시겠습니까?")) {
+      setCurrentLinks(initialMockLinks);
+      triggerToast("기본 데모 링크로 초기화되었습니다.");
+    }
+  };
+
+  // 활성화된 링크만 순서대로 정렬하여 노출 (방문자 모드일 때)
+  const activeLinks = [...currentLinks]
     .filter((l) => l.isActive)
     .sort((a, b) => a.order - b.order);
+
+  // 관리 모드일 때는 모든 링크를 순서대로 노출
+  const displayedLinks = isManageMode
+    ? [...currentLinks].sort((a, b) => a.order - b.order)
+    : activeLinks;
 
   const handleCopyLink = async () => {
     try {
@@ -33,9 +109,8 @@ export function LinkListView({
         await navigator.clipboard.writeText(window.location.href);
       }
       setCopied(true);
-      setShowToast(true);
+      triggerToast("클립보드에 프로필 주소가 복사되었습니다! ✨");
       setTimeout(() => setCopied(false), 2500);
-      setTimeout(() => setShowToast(false), 3000);
     } catch {
       setCopied(false);
     }
@@ -52,9 +127,9 @@ export function LinkListView({
           <span className="text-[#ec48bd]">✦</span>
           <span>NEXT.JS 16 & REACT 19 • SHADCN/UI</span>
           <span className="text-[#35ed7e]">✦</span>
-          <span>★ WELCOME TO {profile.displayName.toUpperCase()}&apos;S MYLINK</span>
+          <span>LOCAL STATE & DIALOG MANAGEMENT</span>
           <span className="text-[#ec48bd]">✦</span>
-          <span>ALL LINKS IN ONE VIBE SPACE</span>
+          <span>★ WELCOME TO {profile.displayName.toUpperCase()}&apos;S MYLINK</span>
           <span className="text-[#35ed7e]">✦</span>
         </div>
       </div>
@@ -184,22 +259,105 @@ export function LinkListView({
           <div className="flex items-center gap-2">
             <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#5865f2]" />
             <h2 className="font-mono text-xs sm:text-sm font-bold tracking-wider uppercase text-neutral-200">
-              Featured Links & Spaces
+              {isManageMode ? "링크 관리 및 편집 리스트" : "Featured Links & Spaces"}
             </h2>
           </div>
-          <span className="border border-[#23272a] bg-[#1e2353] text-neutral-400 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold">
-            {activeLinks.length} ITEMS
-          </span>
+          
+          <div className="flex items-center gap-2">
+            <span className="border border-[#23272a] bg-[#1e2353] text-neutral-400 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold">
+              {isManageMode
+                ? `${displayedLinks.length} TOTAL`
+                : `${activeLinks.length} ACTIVE`}
+            </span>
+          </div>
         </div>
 
-        {/* 4. Link Item List Component */}
-        <section className="flex flex-col gap-3">
-          {activeLinks.map((link) => (
-            <LinkItemCard key={link.id} link={link} />
-          ))}
+        {/* 4. 빠른 링크 관리 컨트롤 바 (양쪽 정렬 및 확장된 버튼 크기) */}
+        <section className="w-full flex flex-col gap-2">
+          <div className="grid grid-cols-2 gap-3 w-full">
+            {/* 새 링크 추가 다이얼로그 (Dialog) */}
+            <AddLinkDialog
+              onAddLink={handleAddLink}
+              trigger={
+                <Button
+                  variant="discord-primary"
+                  className="w-full h-11 sm:h-12 py-2.5 px-4 text-sm sm:text-base font-bold flex items-center justify-center gap-2 rounded-xl shadow-[0_4px_16px_rgba(88,101,242,0.35)] hover:shadow-[0_6px_22px_rgba(88,101,242,0.5)] transition-all cursor-pointer"
+                >
+                  <Plus className="w-4 h-4 sm:w-5 sm:h-5 stroke-[3]" />
+                  <span>새 링크 추가</span>
+                </Button>
+              }
+            />
+
+            {/* 관리/편집 모드 토글 */}
+            <Button
+              onClick={() => setIsManageMode(!isManageMode)}
+              variant={isManageMode ? "discord-white" : "discord-ghost"}
+              className="w-full h-11 sm:h-12 py-2.5 px-4 text-sm sm:text-base font-bold flex items-center justify-center gap-2 rounded-xl border border-[#23272a] hover:border-[#5865f2] transition-all cursor-pointer"
+            >
+              <SlidersHorizontal className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span>{isManageMode ? "편집 완료" : "링크 편집 모드"}</span>
+            </Button>
+          </div>
+
+          {/* 초기화 / 시드 복원 버튼 (관리 모드 시 노출) */}
+          {isManageMode && (
+            <div className="flex justify-end pt-0.5">
+              <button
+                type="button"
+                onClick={handleResetLinks}
+                className="text-xs font-mono text-neutral-400 hover:text-white flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#1e2353]/60 border border-[#23272a] hover:bg-[#1e2353] transition-colors cursor-pointer"
+                title="기본 데모 링크로 초기화"
+              >
+                <RotateCcw className="w-3 h-3" />
+                <span>초기 기본 링크로 되돌리기</span>
+              </button>
+            </div>
+          )}
         </section>
 
-        {/* 5. Highest-Intent Share CTA Button (DESIGN.md button-green 규격) */}
+        {/* 5. Link Item List Component */}
+        <section className="flex flex-col gap-3">
+          {displayedLinks.length > 0 ? (
+            displayedLinks.map((link) => (
+              <LinkItemCard
+                key={link.id}
+                link={link}
+                isManageMode={isManageMode}
+                onToggleActive={handleToggleActive}
+                onDelete={handleDeleteLink}
+              />
+            ))
+          ) : (
+            <div className="w-full bg-[#1e2353]/50 border border-dashed border-[#23272a] rounded-2xl p-8 flex flex-col items-center justify-center text-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-[#0a0d3a] flex items-center justify-center text-neutral-500">
+                <Layers className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-neutral-300">
+                  표시할 링크가 없습니다.
+                </p>
+                <p className="text-xs text-neutral-500 mt-1">
+                  &apos;새 링크 추가&apos; 버튼을 눌러 첫 번째 링크를 등록해보세요!
+                </p>
+              </div>
+              <AddLinkDialog
+                onAddLink={handleAddLink}
+                trigger={
+                  <Button
+                    variant="discord-primary"
+                    className="py-2 px-4 text-xs font-bold mt-1"
+                  >
+                    <Plus className="w-3.5 h-3.5 stroke-[3]" />
+                    <span>링크 추가하기</span>
+                  </Button>
+                }
+              />
+            </div>
+          )}
+        </section>
+
+        {/* 6. Highest-Intent Share CTA Button (DESIGN.md button-green 규격) */}
         <section className="w-full pt-1">
           <Button
             onClick={handleCopyLink}
@@ -220,7 +378,7 @@ export function LinkListView({
           </Button>
         </section>
 
-        {/* 6. Brand Footer */}
+        {/* 7. Brand Footer */}
         <footer className="mt-4 pt-6 border-t border-[#23272a]/80 flex flex-col items-center gap-2 text-center">
           <div className="inline-flex items-center gap-2 border border-[#23272a] bg-[#1e2353] px-3 py-1 rounded-full shadow-sm">
             <span className="w-2 h-2 rounded-full bg-[#35ed7e]" />
@@ -236,11 +394,11 @@ export function LinkListView({
       </main>
 
       {/* Floating Toast Notification */}
-      {showToast && (
+      {toastMessage && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-bounce max-w-[92vw]">
           <div className="border border-[#35ed7e]/50 bg-[#1e2353] text-white px-5 py-3 rounded-2xl font-bold text-xs sm:text-sm shadow-[0_12px_32px_rgba(0,0,0,0.5)] flex items-center gap-2.5 break-keep">
             <span className="text-[#35ed7e]">✨</span>
-            <span>클립보드에 프로필 주소가 복사되었습니다!</span>
+            <span>{toastMessage}</span>
           </div>
         </div>
       )}
