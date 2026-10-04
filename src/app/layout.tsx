@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "안준성 | 프로필",
-  description: "안녕하세요! 바이브 코딩을 배우고 있는 한양대학교 학생입니다.",
+  title: "안준성 (Junseong Ahn) | Vibe Coder ✦ MyLink",
+  description: "아이디어를 현실로 만드는 바이브 코더 안준성의 Neobrutalism 링크 허브",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -23,7 +23,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="ko"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col bg-dot-grid text-black">{children}</body>
     </html>
   );
 }
