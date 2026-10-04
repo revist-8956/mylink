@@ -1,0 +1,98 @@
+[
+  {
+    "id": "link-001",
+    "userId": "user-junseong-001",
+    "title": "GitHub Repository",
+    "url": "https://github.com",
+    "description": "오픈소스 프로젝트 & 일일 커밋 잔디 기록",
+    "badge": "CODE",
+    "icon": "github",
+    "isActive": true,
+    "order": 0,
+    "createdAt": "2026-10-04T01:00:00.000Z"
+  },
+  {
+    "id": "link-002",
+    "userId": "user-junseong-001",
+    "title": "기술 블로그 & 개발 일지",
+    "url": "https://velog.io",
+    "description": "Next.js 16과 AI 바이브 코딩 학습 기록 및 트러블슈팅 TIL",
+    "badge": "LOG",
+    "icon": "book-open",
+    "isActive": true,
+    "order": 1,
+    "createdAt": "2026-10-04T01:05:00.000Z"
+  },
+  {
+    "id": "link-003",
+    "userId": "user-junseong-001",
+    "title": "바이브 코딩 프로젝트 쇼케이스",
+    "url": "https://github.com/trending",
+    "description": "아이디어를 현실로 구현한 웹 프로덕트 및 토이 프로젝트 모음",
+    "badge": "HOT",
+    "icon": "sparkles",
+    "isActive": true,
+    "order": 2,
+    "createdAt": "2026-10-04T01:10:00.000Z"
+  },
+  {
+    "id": "link-004",
+    "userId": "user-junseong-001",
+    "title": "협업 & 커피챗 문의",
+    "url": "mailto:contact@junseong.dev",
+    "description": "새로운 프로젝트 아이디어 및 커피챗 언제든 환영합니다!",
+    "badge": "TALK",
+    "icon": "coffee",
+    "isActive": true,
+    "order": 3,
+    "createdAt": "2026-10-04T01:15:00.000Z"
+  },
+  {
+    "id": "link-005",
+    "userId": "user-junseong-001",
+    "title": "디자인 시스템 & 컴포넌트 가이드",
+    "url": "https://ui.shadcn.com",
+    "description": "shadcn/ui + Discord 디자인 토큰 인터랙티브 문서",
+    "badge": "DOCS",
+    "icon": "palette",
+    "isActive": true,
+    "order": 4,
+    "createdAt": "2026-10-04T01:20:00.000Z"
+  },
+  {
+    "id": "link-006",
+    "userId": "user-junseong-001",
+    "title": "유튜브 개발 튜토리얼 채널",
+    "url": "https://youtube.com",
+    "description": "AI 페어 프로그래밍 실전 코딩 라이브 스트리밍",
+    "badge": "NEW",
+    "icon": "video",
+    "isActive": true,
+    "order": 5,
+    "createdAt": "2026-10-04T01:25:00.000Z"
+  },
+  {
+    "id": "link-007",
+    "userId": "user-junseong-001",
+    "title": "노션 포트폴리오 & 이력서",
+    "url": "https://notion.so",
+    "description": "학력, 수상 이력, 프로젝트 상세 기여도 문서",
+    "badge": "RESUME",
+    "icon": "file-text",
+    "isActive": false,
+    "order": 6,
+    "createdAt": "2026-10-04T01:30:00.000Z"
+  },
+  {
+    "id": "link-008",
+    "userId": "user-junseong-001",
+    "title": "디스코드 바이브 코딩 커뮤니티",
+    "url": "https://discord.com",
+    "description": "동료 개발자들과 함께하는 스터디 및 정보 공유 공간",
+    "badge": "JOIN",
+    "icon": "message-square",
+    "isActive": false,
+    "order": 7,
+    "createdAt": "2026-10-04T01:35:00.000Z"
+  }
+]

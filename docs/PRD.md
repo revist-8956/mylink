@@ -1,8 +1,8 @@
 # [PRD] 링크트리 클론 서비스: mylink (기능 정의서)
 
-> **버전:** v1.1.0 (MVP)  
+> **버전:** v1.2.0 (MVP)  
 > **작성일:** 2026-10-04  
-> **상태:** 확정 (Aligned via `/grill-me` & `DESIGN.md` 준수 원칙 반영)  
+> **상태:** 확정 (shadcn/ui + Discord 스타일 하이브리드 디자인 시스템 표준 반영)  
 > **문서 대상:** 기획자, 디자이너, 프론트엔드 개발자
 
 ---
@@ -17,10 +17,14 @@
 - 누구나 간편하게 자신만의 개성을 표현할 수 있도록 트렌디한 테마 프리셋과 실시간 모바일 미리보기를 제공.
 - 백엔드/외부 인프라 복잡도를 최소화하기 위해 **Mock 데이터 및 LocalStorage 기반 클라이언트 전용 데모 아키텍처**로 구현하여, 별도 서버 설치 없이 브라우저에서 즉시 체험 및 테스트가 가능한 초소형 MVP를 구축.
 
-### 1.3 ★ 디자인 핵심 원칙 (Non-Negotiable Design Rule)
+### 1.3 ★ 디자인 핵심 원칙: shadcn/ui + Discord 스타일 융합 (Hybrid Design System)
 > [!IMPORTANT]
-> **메인 테마인 Discord 테마는 반드시 [`DESIGN.md`](./DESIGN.md)에 정의된 모든 디자인 토큰, 컬러 규격, 타이포그래피 위계, 컴포넌트 명세, Do's & Don'ts를 100% 엄격하게 준수해야 하며 임의로 변형하거나 벗어나서는 안 됩니다.**  
-> (다른 보조 테마는 선택형 프리셋으로 다양성을 제공하되, 서비스의 정체성을 대표하는 플래그십 테마는 `DESIGN.md` 기반의 Discord 시스템입니다.)
+> **1. 기본 컴포넌트 아키텍처: shadcn/ui 기반**  
+> 모든 UI 컴포넌트 프리미티브는 **`shadcn/ui` (Base UI / Radix, CVA, `cn` 유틸리티)**를 기본 토대로 구성하여 높은 웹 접근성(A11y), 견고한 상태 관리, 확장 가능한 코드 모듈성을 확보합니다.  
+> 
+> **2. 시각 스타일 & 테마 토큰: Discord 스타일 100% 준수**  
+> 시각적 스타일, 테마 토큰, 컬러 규격, 타이포그래피 위계, 모서리 라운드는 **[`DESIGN.md`](./DESIGN.md)의 Discord 디자인 규격을 100% 엄격하게 준수**해야 합니다. shadcn/ui 컴포넌트의 variant(CVA)와 CSS 변수를 커스터마이징하여 Discord 고유의 딥 인디고 캔버스, 블러플, 일렉트릭 그린, 마젠타의 아케이드 감성을 구현합니다.  
+> (다른 보조 테마는 선택형 프리셋으로 다양성을 제공하되, 서비스의 정체성을 대표하는 플래그십 테마는 `shadcn/ui` + `Discord` 시스템입니다.)
 
 ---
 
@@ -43,7 +47,7 @@
 - [x] 링크 부가 속성 (제목, URL, 서브 설명, 뱃지/태그, 아이콘/이모지)
 - [x] 링크 순서 변경 (드래그 앤 드롭 및 위/아래 이동) 및 활성화/숨김 토글
 - [x] 프로필 정보 편집 (프로필 이미지, 닉네임, 한 줄 소개(Bio), 소셜 아이콘 바)
-- [x] **DESIGN.md 규격 100% 준수 Discord 메인 테마** + 3종 보조 테마 프리셋 원클릭 적용
+- [x] **shadcn/ui 기반 + DESIGN.md 규격 100% 준수 Discord 메인 테마** + 3종 보조 테마 프리셋 원클릭 적용
 - [x] 데스크탑 2분할(좌측 편집기 + 우측 모바일 목업 실시간 프리뷰) 및 모바일 탭 전환 UI
 - [x] 공개 프로필 페이지 (`/[username]`) 반응형 렌더링 및 링크 복사 토스트
 - [x] 서비스 소개 랜딩 페이지 (`/`)
@@ -72,7 +76,7 @@ flowchart TD
 | 경로 (Path) | 화면명 | 설명 및 주요 기능 |
 | :--- | :--- | :--- |
 | `/` | **서비스 랜딩 페이지** | Discord 테마 기반 히어로 및 마키 밴드, 서비스 소개, 샘플 데모 체험 링크, 로그인/가입 CTA |
-| `/login` | **로그인 페이지** | 이메일/비밀번호 입력, 기본 테스트 계정 원클릭 로그인 지원 |
+| `/login` | **로그인 페이지** | 이메일/비밀번호 입력, 기본 테스트 계정 원클릭 로그인 지원 (shadcn Card, Input, Button) |
 | `/register` | **회원가입 페이지** | 이메일, 비밀번호, 사용할 핸들(username) 입력 및 유효성 검사 |
 | `/admin` | **관리자 대시보드** | 좌측 편집 패널(링크 관리 탭, 프로필/테마 탭) + 우측 실시간 모바일 목업 프리뷰 |
 | `/[username]` | **공개 프로필 페이지** | 방문자 전용 페이지. 선택된 테마로 프로필 및 활성화된 링크 렌더링, URL 복사 기능 |
@@ -97,7 +101,7 @@ flowchart TD
   - `description`: 링크 아래 작게 표시될 부연 설명 (최대 100자)
   - `badge`: 링크 우측에 강조 표시될 뱃지 텍스트 (예: HOT, NEW, PORTFOLIO, BLOG)
   - `icon`: 링크 좌측에 표시될 아이콘/이모지 (프리셋 아이콘 선택기 또는 이모지 입력)
-- **F-LINK-04 (활성화 토글):** 각 링크 카드의 스위치를 통해 활성화/비활성화할 수 있으며, 비활성화된 링크는 공개 프로필 및 프리뷰에서 숨김 처리된다.
+- **F-LINK-04 (활성화 토글):** 각 링크 카드의 스위치(shadcn Switch)를 통해 활성화/비활성화할 수 있으며, 비활성화된 링크는 공개 프로필 및 프리뷰에서 숨김 처리된다.
 - **F-LINK-05 (순서 정렬):** 드래그 앤 드롭 핸들 또는 위/아래 이동 버튼을 통해 링크 순서를 자유롭게 변경할 수 있다.
 - **F-LINK-06 (링크 삭제):** 삭제 확인 후 목록에서 제거할 수 있다.
 
@@ -112,7 +116,7 @@ flowchart TD
 
 ### 5.4 테마 및 디자인 커스터마이징 (Themes & Appearance)
 - **F-THM-01 (테마 프리셋 제공):**
-  1. **Discord Arcade (메인 기본 테마 - DESIGN.md 준수 필수):**
+  1. **Discord Arcade (메인 기본 테마 - shadcn/ui + DESIGN.md 준수 필수):**
      - 딥 인디고 캔버스(`colors.canvas`: `#0a0d3a`) + 블러플-마젠타 동적 그라디언트 메쉬
      - 레이즈드 인디고 서피스(`colors.surface-indigo`: `#1e2353`) 및 블러플(`colors.primary`: `#5865f2`) 버튼
      - 최고 중요도 CTA 전용 일렉트릭 그린(`colors.green`: `#35ed7e`) 버튼
@@ -189,14 +193,25 @@ interface LinkItem {
 
 ---
 
-## 7. ★ DESIGN.md 상세 준수 명세 (Discord Flagship Theme)
+## 7. ★ 디자인 시스템 구현 명세 (shadcn/ui + Discord Style Integration)
 
-> `DESIGN.md`에 명시된 토큰 및 가이드라인을 100% 매핑하여 적용합니다.
+> UI 컴포넌트 프리미티브는 **`shadcn/ui`**를 바탕으로 구축하되, 시각적 스타일링은 **[`DESIGN.md`](./DESIGN.md)**의 Discord 토큰 및 규격을 100% 매핑하여 확장 적용합니다.
 
-### 7.1 컬러 팔레트 (Color Tokens)
+### 7.1 shadcn/ui 프리미티브 컴포넌트 매핑 (Architecture)
+
+| shadcn/ui 프리미티브 | Discord 스타일 매핑 및 커스터마이징 | 주요 속성 / CVA Variant |
+| :--- | :--- | :--- |
+| **`Button`** (`button.tsx`) | • `discord-primary`: 배경 `#5865f2`, 텍스트 `#ffffff`, 둥글기 `12px`(`rounded.sm`), 패딩 `16px 24px`<br>• `discord-green`: 배경 `#35ed7e`, 텍스트 `#000000`, 둥글기 `12px` (최고 중요도 CTA 전용)<br>• `discord-ghost`: 배경 `#1e2353`, 텍스트 `#ffffff`, 둥글기 `16px`(`rounded.lg`)<br>• `discord-white`: 배경 `#ffffff`, 텍스트 `#000000`, 둥글기 `16px` | `variant: "discord-primary" \| "discord-green" \| "discord-ghost" \| "discord-white"` |
+| **`Card`** (`card.tsx`) | • 배경: `#1e2353` (`surface-indigo`), 테두리: `#23272a`<br>• 둥글기: `16px` (`rounded.lg`) 또는 대형 패널 `40px` (`rounded.xl`)<br>• 그림자: 바이올렛 확산 글로우 (`0 8px 32px rgba(69,42,124,0.25)`) | 프로필 카드, 링크 카드, 랜딩 피처 카드 |
+| **`Badge`** (`badge.tsx`) | • 배경: `#ec48bd` (`colors.magenta`), 텍스트: `#ffffff`<br>• 둥글기: `16px` (`rounded.lg`) 또는 `50px` (`rounded.pill`)<br>• 패딩: `4px 12px` | 링크 태그(HOT, NEW), 프로필 상태 뱃지 |
+| **`Input` / `Textarea`** | • 배경: `#0a0d3a` (인디고 캔버스 톤), 테두리: `#23272a`<br>• 포커스 시: `#5865f2` (Blurple) 링 효과, 둥글기: `12px` | 링크 제목/URL 입력, Bio 작성 필드 |
+| **`Switch`** (`switch.tsx`) | • On 활성: `#35ed7e` (Green) 또는 `#5865f2` (Blurple)<br>• Off 비활성: `#23272a` (Onyx) | 링크 활성화/숨김 토글 스위치 |
+| **`Dialog` / `Modal`** | • 배경: `#1e2353`, 테두리: `#23272a`, 둥글기: `24px`<br>• 오버레이: `#0a0d3a`/80 백드롭 블러 | 링크 삭제 확인 모달, 설정 팝업 |
+
+### 7.2 컬러 팔레트 (Color Tokens)
 | 토큰 | Hex 코드 | 역할 및 사용처 |
 | :--- | :--- | :--- |
-| `colors.primary` | `#5865f2` (Blurple) | **브랜드 앵커 컬러.** 기본 CTA 버튼(`button-primary`), 마키 밴드, 스탯 카드, 브랜드 로고 |
+| `colors.primary` | `#5865f2` (Blurple) | **브랜드 앵커 컬러.** 기본 CTA 버튼(`discord-primary`), 마키 밴드, 스탯 카드, 브랜드 로고 |
 | `colors.green` | `#35ed7e` (Electric Green) | **단 하나의 최우선 CTA 전용.** ("프로필 링크 복사 및 공유" 버튼), 항상 검정 텍스트(`#000000`)와 페어링 |
 | `colors.magenta` | `#ec48bd` (Vibrant Magenta) | 뱃지 태그(`badge`), 그라디언트 패널의 포인트, 강조 칩 |
 | `colors.link` | `#00b0f4` (Link Cyan) | 다크 서피스 위의 인라인 텍스트 링크 |
@@ -208,7 +223,7 @@ interface LinkItem {
 | `colors.ink-dark` | `#000000` (Black) | 그린 버튼 및 화이트 버튼 위의 텍스트 |
 | `colors.hairline` | `#23272a` | 테두리 및 구분선 |
 
-### 7.2 타이포그래피 (Typography Hierarchy)
+### 7.3 타이포그래피 (Typography Hierarchy)
 - **Display Type:** ABC Ginto Nord (오픈소스 대체: Space Grotesk / Hanken Grotesk weight 700~800)
   - 헤드라인은 짧고 단정하며 **대문자(ALL-CAPS)** 위주로 볼드하게 선언
 - **Body & UI Type:** ggsans (대체: Inter / Plus Jakarta Sans weight 400~500)
@@ -224,7 +239,7 @@ interface LinkItem {
 | `body` | 16px | 400 | 1.5 | 기본 본문, 소개글(Bio) |
 | `link-sm` | 14px | 500 | 1.4 | 뱃지, 소형 링크, 부연 설명 |
 
-### 7.3 기하학 및 라운드 스케일 (Rounded Geometry)
+### 7.4 기하학 및 라운드 스케일 (Rounded Geometry)
 - `rounded.xs`: 6px (소형 칩)
 - `rounded.sm`: **12px** (Primary CTA & Green CTA 버튼 기본 둥글기)
 - `rounded.md`: 14px (리스트 로우)
@@ -234,15 +249,8 @@ interface LinkItem {
 - `rounded.jumbo`: **120px** (시그니처 오버사이즈 쉐이프)
 - `rounded.full`: **9999px** (원형 아바타, 원형 소셜 아이콘)
 
-### 7.4 컴포넌트 명세 (Components Specification)
-- **`button-primary`**: 배경 `#5865f2`, 텍스트 `#ffffff`, 둥글기 `12px`(`rounded.sm`), 패딩 `16px 24px`
-- **`button-green`**: 배경 `#35ed7e`, 텍스트 `#000000`, 둥글기 `12px`(`rounded.sm`), 패딩 `14px 24px` (최고 중요도 CTA)
-- **`button-ghost`**: 배경 `#1e2353`, 텍스트 `#ffffff`, 둥글기 `16px`(`rounded.lg`), 패딩 `16px`
-- **`badge`**: 배경 `#ec48bd`, 텍스트 `#ffffff`, 둥글기 `16px`(`rounded.lg`), 패딩 `4px 12px`
-- **`marquee-band`**: 배경 `#5865f2`, 텍스트 `#ffffff`, 대문자 스크롤링 티커 (`display-lg`)
-- **`elevation`**: 플랫 그림자 대신 바이올렛 확산 글로우 (`0 3px 68px rgba(69,42,124,0.1)`) 사용
-
 ### 7.5 엄격 준수 사항 (Do's and Don'ts)
+- **[DO]** shadcn/ui 컴포넌트의 접근성 및 상태(focus-visible, disabled, aria-*) 체계를 유지하면서 Discord 스타일을 입힌다.
 - **[DO]** 딥 인디고 캔버스(`#0a0d3a`)와 블러플-마젠타 동적 그라디언트 메쉬를 기본 배경으로 채택한다.
 - **[DO]** `#35ed7e`(Electric Green)은 페이지 내 '가장 중요한 1개의 CTA(프로필 링크 복사 및 공유)'에만 제한적으로 사용한다.
 - **[DO]** 12px~16px의 컨트롤 라운드와 40px+의 패널 라운드로 친근하고 토이 라이크(Toy-like)한 게임 감성을 전달한다.
@@ -267,16 +275,17 @@ interface LinkItem {
 ### Phase 1: 기반 아키텍처 및 Mock Data Layer 구축
 - LocalStorage 저장소 헬퍼 (`storage.ts`) 구현 (초기 데모 시드 데이터 자동 주입)
 - Mock Auth Context & Hook (`useAuth`) 구현 (가입, 로그인, 로그아웃, 세션 감지)
+- shadcn/ui 기반 Discord 테마 variant (`Button`, `Card`, `Badge` 등) 확장
 
 ### Phase 2: 관리자 대시보드 (`/admin`) 개발
 - 데스크탑 2분할 뷰 및 모바일 탭 전환 레이아웃 구축
-- 링크 목록 CRUD 폼 및 순서 변경 UI
+- shadcn/ui 기반 링크 목록 CRUD 폼 및 순서 변경 UI
 - 프로필 정보 및 소셜 링크 편집 패널
 - DESIGN.md 토큰을 준수하는 테마 선택 프리셋 컴포넌트
 - 실시간 모바일 목업 프리뷰 프레임 완성
 
 ### Phase 3: 공개 프로필 페이지 (`/[username]`) 및 랜딩 페이지 (`/`) 개발
-- 동적 라우트 `/[username]` 구현 (DESIGN.md 규격 100% 매핑된 Discord 테마 렌더링)
+- 동적 라우트 `/[username]` 구현 (shadcn/ui + Discord 테마 렌더링)
 - 링크 복사 클립보드 및 토스트 UI (`button-green` 스타일 적용)
 - 서비스 소개 랜딩 페이지 (`/`) 구현 (헤더, 마키 티커, 데모 프로필 진입 버튼, CTA)
 

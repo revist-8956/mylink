@@ -2,7 +2,7 @@
 
 > **문서 버전:** v1.0.0  
 > **관련 문서:** [`docs/PRD.md`](./PRD.md), [`DESIGN.md`](./DESIGN.md)  
-> **적용 테마:** Discord 메인 테마 (DESIGN.md 규격 100% 엄격 준수)
+> **적용 테마:** Discord 메인 테마 (DESIGN.md 규격 100% 엄격 준수 + shadcn/ui 컴포넌트 기반)
 
 ---
 
